@@ -664,35 +664,39 @@ function initHeroScene(){
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 1.75));
   renderer.setSize(holder.clientWidth, holder.clientHeight);
   if(renderer.outputEncoding !== undefined) renderer.outputEncoding = THREE.sRGBEncoding;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
+  renderer.toneMapping = THREE.NoToneMapping;
   holder.appendChild(renderer.domElement);
 
-  scene.add(new THREE.AmbientLight(0x40424c, 1.1));
-  const key = new THREE.PointLight(0xff6b57, 40, 34); key.position.set(4,3,6); scene.add(key);
-  const fillL = new THREE.PointLight(0x5b8cff, 36, 34); fillL.position.set(-5,-2,4); scene.add(fillL);
-  const rim = new THREE.PointLight(0x4dd9c0, 24, 34); rim.position.set(0,5,-4); scene.add(rim);
-  const kick = new THREE.PointLight(0xffb84d, 20, 30); kick.position.set(2,-4,2); scene.add(kick);
+  scene.add(new THREE.AmbientLight(0x40424c, 0.4));
+  const key = new THREE.PointLight(0xff6fa5, 3, 30); key.position.set(4,3,6); scene.add(key);
+  const fillL = new THREE.PointLight(0xb96bff, 2.5, 30); fillL.position.set(-5,-2,4); scene.add(fillL);
+  const rim = new THREE.PointLight(0x4dd9c0, 1.5, 30); rim.position.set(0,5,-4); scene.add(rim);
+  const kick = new THREE.PointLight(0xffb84d, 2, 30); kick.position.set(2,-4,2); scene.add(kick);
 
   const group = new THREE.Group(); scene.add(group);
   const forms = [];
   const disposables = [];
   const specs = [
-    {geo:new THREE.IcosahedronGeometry(1.5,1), color:0xFF6B57, metalness:0.25, roughness:0.35, pos:[-2.1,0.5,0]},
-    {geo:new THREE.TorusKnotGeometry(0.85,0.26,120,16), color:0x5B8CFF, metalness:0.4, roughness:0.28, pos:[2.0,-0.5,-1]},
-    {geo:new THREE.SphereGeometry(0.8,48,48), color:0xFFB84D, metalness:0.15, roughness:0.55, pos:[0.5,1.6,-2]},
-    {geo:new THREE.TorusGeometry(0.65,0.2,32,100), color:0xB96BFF, metalness:0.3, roughness:0.32, pos:[-1.0,-1.7,-1.5]}
+    // muted pink — same hue family as the "Coaching & Mentorship" tag, toned down to match the card pills
+    {geo:new THREE.IcosahedronGeometry(1.5,1), color:0xB85077, metalness:0.35, roughness:0.25, pos:[-2.1,0.5,0]},
+    // muted purple — "Program Leadership"
+    {geo:new THREE.TorusKnotGeometry(0.85,0.26,120,16), color:0x854DB8, metalness:0.5, roughness:0.2, pos:[2.0,-0.5,-1]},
+    // muted gold — "Onboarding & Readiness"
+    {geo:new THREE.SphereGeometry(0.8,48,48), color:0xB88437, metalness:0.1, roughness:0.7, pos:[0.5,1.6,-2]},
+    // muted teal/green — "Knowledge Systems"
+    {geo:new THREE.TorusGeometry(0.65,0.2,32,100), color:0x379C8A, metalness:0.4, roughness:0.3, pos:[-1.0,-1.7,-1.5]}
   ];
   specs.forEach(s=>{
     const mat = new THREE.MeshStandardMaterial({
       color:s.color, metalness:s.metalness, roughness:s.roughness,
-      emissive:new THREE.Color(s.color), emissiveIntensity:0.28
+      emissive:new THREE.Color(s.color), emissiveIntensity:0.4
     });
     const mesh = new THREE.Mesh(s.geo, mat);
     mesh.position.set(s.pos[0], s.pos[1], s.pos[2]);
     group.add(mesh); forms.push(mesh);
     disposables.push(s.geo, mat);
   });
+
 
   function onResize(){
     if(!holder.isConnected) return;
